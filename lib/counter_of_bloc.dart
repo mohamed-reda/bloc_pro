@@ -1,20 +1,35 @@
-import 'package:bloc/bloc.dart';
-import 'package:bloc_pro/main.dart';
+import 'dart:async';
 
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  // TODO: implement initialState
-  int get initialState => 0;
+import 'counter_event.dart';
 
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
+class CounterBloc {
+  int _counter = 0;
+
+  final _counterStateController = StreamController<int>();
+
+  StreamSink<int> get _inCounter => _counterStateController.sink;
+
+  Stream<int> get counter => _counterStateController.stream;
+
+  final _counterEventController = StreamController<CounterEvent>();
+
+  Sink<CounterEvent> get counterEventSink => _counterEventController.sink;
+
+  CounterBloc() {
+    _counterEventController.stream.listen(_mapEventToState);
+  }
+
+  void _mapEventToState(CounterEvent event) {
+    if (event is IncrementEvent)
+      _counter++;
+    else
+      _counter--;
+
+    _inCounter.add(_counter);
+  }
+
+  void dispose() {
+    _counterStateController.close();
+    _counterEventController.close();
   }
 }
