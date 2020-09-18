@@ -1,8 +1,18 @@
+import 'package:bloc_pro/flutter_bloc_ex/flutter_bloc_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'manual_bloc/manual_bloc_page.dart';
+import 'flutter_bloc_ex/flutter_bloc_ex.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  Bloc.observer = FlutterBlocEx();
+
+//  Bloc.observer = BlocEx();
+//  cubitMain();
+//  blocMain();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -12,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ManualBlocPage(),
+      home: FlutterBlocPage(),
     );
   }
 }
